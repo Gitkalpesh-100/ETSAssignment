@@ -1,7 +1,9 @@
 package com.framework.base;
 
+import org.openqa.selenium.PageLoadStrategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -13,14 +15,16 @@ import io.cucumber.java.Before;
 public class BasePage {
 
 	private static WebDriver driver = null;
-
+	ChromeOptions options;
 	//method to launch browser
 	
 	@Before
 	public void launchBrowser() {
 		String browser = ReadProp.readData("Config.properties").getProperty("browser");
-		if (browser.equalsIgnoreCase("Chrome"))
-			driver = new ChromeDriver();
+		if (browser.equalsIgnoreCase("Chrome")){
+			options=new ChromeOptions();
+			options.setPageLoadStrategy(PageLoadStrategy.NORMAL);
+			driver = new ChromeDriver(options);}
 		else if (browser.equalsIgnoreCase("Firefox"))
 			driver = new FirefoxDriver();
 		else if (browser.equalsIgnoreCase("edge"))
@@ -33,7 +37,7 @@ public class BasePage {
 	//method to close browser
 	@After
 	public void tearDownBrowser() {
-		driver.quit();
+		//driver.quit();
 	}
 	
 	//method to share browser details to other classes
